@@ -1,0 +1,45 @@
+.tasks-page__preloader-container {
+  padding-top: 2.5rem;
+  padding-bottom: 2.5rem;
+}
+
+.tasks-page__top {
+  width: 100%;
+}
+
+.tasks-page__title-and-create {
+  display: flex;
+  margin-bottom: 1rem;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.tasks-page__create-button {
+  display: flex;
+  width: auto;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  flex-direction: row-reverse;
+  gap: 0.25rem;
+  align-items: center;
+  border-radius: 0.375rem;
+  color: #ffffff;
+  background-color: #2563eb;
+}
+
+.tasks-page__tabs-container {
+  display: flex;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  gap: 1rem;
+  justify-content: space-between;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    column-gap: 3rem;
+  }
+}
+
+.tasks-page__table-view-container {
+  width: 100%;
+}

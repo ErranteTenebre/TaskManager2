@@ -1,0 +1,49 @@
+.wrapper {
+  width: 100%;
+  padding: 0 0.25rem;
+
+  @media (min-width: 640px) {
+    padding: 0;
+  }
+}
+
+.list {
+  display: flex;
+  padding: 0.25rem;
+  border-radius: 0.75rem;
+  gap: 1.5rem;
+}
+
+.tab {
+  display: flex;
+  padding-top: 0.625rem;
+  padding-bottom: 0.625rem;
+  padding-left: 0.75rem;
+  padding-right: 0.75rem;
+  align-items: center;
+  outline-style: none;
+  width: fit-content;
+  font-size: 1rem;
+  gap: 0.5rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  line-height: 1.25rem;
+  background-color: #ffffff;
+}
+
+.tab.selected {
+  border-bottom-width: 2px;
+  border-color: #2563eb;
+  color: #1d4ed8;
+}
+
+.tab.unselected {
+  color: #1f2937;
+
+  :hover {
+    color: #1e40af;
+  }
+}
+
+.panels {
+}

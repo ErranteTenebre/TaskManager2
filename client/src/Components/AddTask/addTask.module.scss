@@ -1,0 +1,98 @@
+.dialog-title {
+  margin-bottom: 1rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  font-weight: 700;
+  line-height: 1.5rem;
+  color: #111827;
+}
+
+.form-container {
+  display: flex;
+  margin-top: 0.5rem;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.textbox-container {
+  width: 100%;
+}
+
+.textBox {
+  border-radius: 0.25rem;
+  width: 100%;
+}
+
+.row {
+  display: flex;
+  gap: 1rem;
+}
+
+.assets-wrapper {
+  display: flex;
+  margin-top: 1rem;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.assets-label {
+  display: flex;
+  gap: 0.25rem;
+  align-items: center;
+  font-size: 1rem;
+  line-height: 1.5rem;
+
+  :hover {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    cursor: pointer;
+  }
+}
+
+.assets-input {
+  display: none;
+}
+
+.bottom {
+  padding-top: 1.5rem;
+  padding-bottom: 1.5rem;
+  gap: 1rem;
+
+  @media (min-width: 640px) {
+    display: flex;
+    flex-direction: row-reverse;
+  }
+}
+
+.uploading {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  color: #ef4444;
+}
+
+.upload-button {
+  padding-left: 2rem;
+  padding-right: 2rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  color: #ffffff;
+  background-color: #2563eb;
+}
+
+.cancel-button {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  background-color: #ffffff;
+
+  @media (min-width: 640px) {
+    width: auto;
+  }
+}

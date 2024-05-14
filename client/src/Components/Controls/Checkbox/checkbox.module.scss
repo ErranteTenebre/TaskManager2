@@ -1,0 +1,26 @@
+.checkbox {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.input {
+  display: none;
+}
+
+.checkboxCustom {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+  background-color: #fff;
+}
+
+.active {
+  background-color: #007bff;
+}
+
+.label {
+  margin-left: 5px;
+  font-size: 18px;
+}

@@ -1,0 +1,114 @@
+@import "../../Scss/variables.scss";
+.workspacePanel {
+  padding: 0.5rem 1rem;
+  width: 300px;
+}
+
+.workspacePanel__container {
+  position: relative;
+}
+
+.workspacePanel__button {
+  width: 100%;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.workspacePanel__workspace-link {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 15px;
+
+  &:hover {
+    background-color: $lightGray;
+  }
+}
+
+.workspacePanel__workspace-link_disabled {
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.workspacePanelworkspace-icon-wrapper {
+  display: flex;
+  align-items: center;
+  background-color: #f8f8fb;
+  width: 40px;
+  height: 40px;
+}
+
+.workspacePanel__workspace-icon-text {
+  margin: 0 auto;
+  color: $gray;
+}
+
+.workspacePanel__title-container {
+  display: block;
+  text-align: left;
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: 80%;
+}
+
+.workspacePanel__is-workspace-text {
+  font-size: 14px;
+  color: $darkGray;
+}
+
+.workspacePanel__workspace-title {
+  color: $dark;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspacePanel__workspace-icon-container {
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  color: $blue;
+  width: 24px;
+  height: 24px;
+}
+
+.workspacePanel-dropdown {
+  position: absolute;
+  width: 120%;
+  top: 65px;
+  right: 0;
+  background-color: #ffffff;
+  border-radius: 8px;
+}
+
+.workspacePanel__dropdown-workspace {
+  padding: 10px;
+}
+
+.workspacePanel__dropdown_open {
+}
+
+.workspacePanel__dropdown_hidden {
+  display: none;
+}
+
+.workspacePanel__dropdown-options {
+  background-color: #f8f8fb;
+}
+
+.workspacePanel__dropdown-option {
+  display: flex;
+  gap: 10px;
+  padding: 10px 20px;
+}
+
+.workspacePanel__dropdown-option-icon {
+  color: $blue;
+}
+
+.workspacePanel__dropdown-option-text {
+  color: $gray;
+}

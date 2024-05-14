@@ -1,0 +1,161 @@
+@import "./variables.scss";
+
+.link {
+  display: inline-block;
+  font-family: Inter;
+  font-size: 18px;
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.button {
+  text-align: center;
+  font-family: Inter;
+  font-size: 18px;
+  background-color: #6788f3;
+  width: 100%;
+  padding: 10px 20px;
+  border-radius: 10px;
+  border: none;
+  color: white;
+}
+
+.button:hover {
+  border: 1px solid #2142af;
+}
+
+.button-medium {
+  font-size: 20px;
+}
+
+.text {
+  font-family: Inter;
+  font-size: 18px;
+  line-height: 150%;
+}
+
+.input {
+  background-color: #cccccc;
+  border-radius: 10px;
+  padding: 10px 20px;
+}
+
+.custom-checkbox {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  background-color: #fff;
+  border: 1px solid #aaa;
+  border-radius: 4px;
+}
+
+.h2 {
+  font-family: Inter;
+  font-size: 72px;
+  font-weight: normal;
+  text-align: center;
+}
+
+.small-title {
+  font-family: Inter;
+  font-size: 24px;
+  font-weight: normal;
+  text-align: center;
+}
+
+.gray {
+  color: $gray;
+}
+
+.gray.underlined {
+  border-bottom: 2px solid $gray;
+}
+
+.link.gray:hover {
+  color: $darkGray;
+  transition: all 0.3s ease;
+}
+
+.link.gray.underlined:hover {
+  border-bottom: 2px solid $darkGray;
+}
+
+.blue {
+  color: $blue;
+}
+
+.blue.underlined {
+  border-bottom: 2px solid $lightBlue;
+}
+
+.underlined:hover {
+  border-bottom: 2px solid #e3e4e8;
+}
+
+.link.blue:hover {
+  color: $blue;
+  transition: all 0.3s ease;
+}
+
+.link.blue.underlined:hover {
+  border-bottom: 2px solid $blue;
+  transition: all 0.3s ease;
+}
+
+.page {
+  height: 100vh;
+}
+
+.main-page-container {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+}
+
+.main-page-content {
+  overflow-y: auto;
+  flex: 1 1 0%;
+}
+
+.content-inner {
+  background-color: #f3f4f6;
+  padding: 1rem;
+  @media (min-width: 1536px) {
+    padding-left: 2.5rem;
+    padding-right: 2.5rem;
+  }
+}
+
+.error-text {
+  font-size: 0.75rem;
+  color: rgba(246, 73, 73, 0.996);
+}
+
+.bg-blue-600 {
+  background-color: #2563eb;
+}
+
+.bg-yellow-600 {
+  background-color: #d97706;
+}
+
+.bg-green-600 {
+  background-color: #059669;
+}
+
+.bg-red-600 {
+  background-color: #dc2626;
+}
+
+.text-red-600 {
+  color: #dc2626;
+}
+
+.text-yellow-600 {
+  color: #d97706;
+}
+
+.text-blue-600 {
+  color: #2563eb;
+}

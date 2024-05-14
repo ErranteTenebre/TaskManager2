@@ -1,0 +1,64 @@
+@import "Scss/variables.scss";
+.formInput {
+  display: flex;
+  align-items: center;
+  background-color: #fbfbfc;
+  padding: 10px 20px;
+  border-radius: 5%;
+  svg {
+    path {
+      fill: #a6acbf;
+    }
+    rect {
+      fill: #a6acbf;
+    }
+  }
+}
+
+.hovered {
+  input::placeholder {
+    fill: #7b8193;
+    transition: all 0.3s ease;
+  }
+
+  svg {
+    rect {
+      fill: #7b8193;
+      transition: all 0.3s ease;
+    }
+
+    path {
+      fill: #7b8193;
+      transition: all 0.3s ease;
+    }
+  }
+}
+
+.focused {
+  svg {
+    rect {
+      fill: #6788f3;
+      transition: all 0.3s ease;
+    }
+
+    path {
+      fill: #6788f3;
+      transition: all 0.3s ease;
+    }
+  }
+}
+
+.imageContainer {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.input {
+  font-size: 18px;
+  flex-grow: 1;
+}
+
+.errorBlock {
+  margin-top: 0.125rem;
+}
