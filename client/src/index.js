@@ -7,12 +7,15 @@ import AuthProvider from "Context/AuthContext";
 import { Provider } from "react-redux";
 
 import store from "store/store";
+import { DataProvider } from "Context/DataContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <Provider store={store}>
     <AuthProvider>
-      <App />
+      <DataProvider>
+        <App />
+      </DataProvider>
     </AuthProvider>
   </Provider>
 );

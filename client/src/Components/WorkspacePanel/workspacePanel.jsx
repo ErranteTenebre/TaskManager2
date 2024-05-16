@@ -1,42 +1,43 @@
 import { UserPlus } from "lucide-react";
 import styles from "./workspacePanel.module.scss";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { IoCheckmark, IoPeople, IoSettings } from "react-icons/io5";
 import { getInitials } from "Utils/generalUtils";
 
 import { useDispatch, useSelector } from "react-redux";
-import { setSelectedWorkspaceId } from "store/actions/workspaceActions"; // Путь к вашему действию
+// import { setSelectedWorkspaceId } from "store/actions/workspaceActions";
 import { useLocation, useNavigate } from "react-router-dom";
+import { DataContext } from "Context/DataContext";
 
 const workspaceBaseUrl = "/workspace";
 
-const workspaces = [
-  {
-    id: 0,
-    name: "Мое рабочее пространство",
-  },
-  {
-    id: 1,
-    name: "Чисто прикольное пространство",
-  },
-  {
-    id: 2,
-    name: "2",
-  },
-  {
-    id: 3,
-    name: "3",
-  },
-  {
-    id: 4,
-    name: "4",
-  },
-  {
-    id: 5,
-    name: "5",
-  },
-];
+// const workspaces = [
+//   {
+//     id: 0,
+//     name: "Мое рабочее пространство",
+//   },
+//   {
+//     id: 1,
+//     name: "Чисто прикольное пространство",
+//   },
+//   {
+//     id: 2,
+//     name: "2",
+//   },
+//   {
+//     id: 3,
+//     name: "3",
+//   },
+//   {ё
+//     id: 4,
+//     name: "4",
+//   },
+//   {
+//     id: 5,
+//     name: "5",
+//   },
+// ];
 
 const options = [
   {
@@ -72,10 +73,21 @@ const options = [
 ];
 
 const WorkspacePanel = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const selectedWorkspaceId = useSelector(
-    (state) => state.workspace.selectedWorkspaceId
-  );
+  const handleWorkspaceSelect = (e, workspace) => {
+    e.preventDefault();
+
+    setSelectedWorkspace(workspace);
+
+    let parts = location.pathname.split("/");
+
+    // Заменяем значение в массиве
+    parts[2] = workspace.id;
+
+    // Объединяем массив обратно в строку
+    let replacedString = parts.join("/");
+
+    navigate(replacedString);
+  };
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -84,15 +96,32 @@ const WorkspacePanel = () => {
       }
     };
 
+    const handleClick = (event) => {
+      if (panelRef.current && !panelRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("click", handleClick);
+
     document.addEventListener("keydown", handleKeyDown);
 
     return () => {
       document.removeEventListener("keydown", handleKeyDown);
+      document.addEventListener("click", handleClick);
     };
   }, []);
 
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const panelRef = useRef();
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  const { workspaces, selectedWorkspace, setSelectedWorkspace } =
+    useContext(DataContext);
+
   return (
-    <div className={styles["workspacePanel"]}>
+    <div className={styles["workspacePanel"]} ref={panelRef}>
       <div className={styles["workspacePanel__container"]}>
         <button
           className={styles["workspacePanel__button"]}
@@ -100,11 +129,15 @@ const WorkspacePanel = () => {
             setIsDropdownOpen(!isDropdownOpen);
           }}
         >
-          <WorkspacePanelItem
-            workspaceId={selectedWorkspaceId}
-            workspaceName={workspaces[selectedWorkspaceId].name}
-            disabled
-          ></WorkspacePanelItem>
+          {workspaces ? (
+            <WorkspacePanelItem
+              workspaceId={selectedWorkspace}
+              workspaceName={selectedWorkspace.title}
+              disabled
+            ></WorkspacePanelItem>
+          ) : (
+            ""
+          )}
         </button>
 
         <div
@@ -114,16 +147,21 @@ const WorkspacePanel = () => {
               : styles["workspacePanel__dropdown_hidden"]
           }`}
         >
-          <WorkspacePanelItem
-            workspaceId={selectedWorkspaceId}
-            workspaceName={workspaces[selectedWorkspaceId].name}
-            disabled
-          ></WorkspacePanelItem>
+          {workspaces ? (
+            <WorkspacePanelItem
+              workspaceId={selectedWorkspace}
+              workspaceName={selectedWorkspace.title}
+              disabled
+            ></WorkspacePanelItem>
+          ) : (
+            ""
+          )}
 
           <WorkspaceOptions>
-            {options.map((option) => {
+            {options.map((option, i) => {
               return (
                 <WorkspaceOption
+                  key={i}
                   icon={option.icon}
                   text={option.text}
                   href={option.href}
@@ -133,16 +171,22 @@ const WorkspacePanel = () => {
           </WorkspaceOptions>
 
           <div className={styles["workspacePanel__dropdown-workspace-list"]}>
-            {workspaces.map((workspace) => {
-              return workspace.id !== selectedWorkspaceId ? (
-                <WorkspacePanelItem
-                  workspaceId={workspace.id}
-                  workspaceName={workspace.name}
-                />
-              ) : (
-                ""
-              );
-            })}
+            {workspaces
+              ? workspaces.map((workspace) => {
+                  return workspace.id !== selectedWorkspace.id ? (
+                    <WorkspacePanelItem
+                      key={workspace.id}
+                      workspaceId={workspace.id}
+                      workspaceName={workspace.title}
+                      onClick={(event) =>
+                        handleWorkspaceSelect(event, workspace)
+                      }
+                    />
+                  ) : (
+                    ""
+                  );
+                })
+              : ""}
           </div>
         </div>
       </div>
@@ -154,33 +198,12 @@ const WorkspacePanelItem = ({
   workspaceId,
   workspaceName,
   disabled = false,
+  onClick,
 }) => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const handleWorkspaceChange = (workspaceId) => {
-    dispatch(setSelectedWorkspaceId(workspaceId));
-    localStorage.setItem("selectedWorkspaceId", workspaceId.toString());
-
-    let parts = location.pathname.split("/");
-
-    // Заменяем значение в массиве
-    parts[2] = workspaceId.toString();
-
-    // Объединяем массив обратно в строку
-    let replacedString = parts.join("/");
-
-    navigate(replacedString);
-  };
-
   return (
     <a
       href="##"
-      onClick={(e) => {
-        e.preventDefault();
-        handleWorkspaceChange(workspaceId);
-      }}
+      onClick={onClick}
       className={`${styles["workspacePanel__workspace-link"]} ${
         styles["workspacePanel__dropdown-workspace"]
       } ${disabled ? styles["workspacePanel__workspace-link_disabled"] : ""}`}

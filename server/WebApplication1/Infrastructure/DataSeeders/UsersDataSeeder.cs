@@ -9,7 +9,7 @@ namespace WebApplication1.Infrastructure.DataSeeders
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.HasData(
-                new User() { Id = 1, Password = "123", Email = "mrm.aimdar@mail.ru" }
+                new User() { Id = 1, Login = "Sungat Aidar", Password = "111111", Email = "mrm.aimdar@mail.ru" }
                 );
         }
     }

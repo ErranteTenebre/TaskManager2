@@ -5,6 +5,7 @@ import { createContext, useEffect, useState } from "react";
 import { Circle } from "react-preloaders";
 import inMemoryJwtService from "Services/inMemoryJwtService";
 import { Preloader } from "Components/Preloader";
+import { handleGetWorkspace } from "Context/DataContext";
 
 export const AuthClient = axios.create({
   baseURL: `${config.SERVER_BASE_URL}`,
@@ -16,15 +17,17 @@ export const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [isAppReady, setIsAppReady] = useState(false);
   const [isUserLogged, setIsUserLogged] = useState(false);
+  const [user, setUser] = useState();
   const [data, setData] = useState();
 
   const handleSignUp = (data) => {
     AuthClient.post("/register", data)
       .then((response) => {
-        const { accessToken, expireTime } = response.data;
+        const { accessToken, expireTime, user } = response.data;
         inMemoryJwtService.setToken(accessToken, expireTime);
 
         setIsUserLogged(true);
+        setUser(user);
       })
       .catch((error) => {
         showErrorMessage(error);
@@ -38,32 +41,36 @@ const AuthProvider = ({ children }) => {
       .then((response) => {
         inMemoryJwtService.deleteToken();
         setIsUserLogged(false);
+        setUser();
       })
       .catch((error) => {
         showErrorMessage(error);
       });
   };
 
-  const handleSignIn = (data, navigateTo) => {
-    AuthClient.post("/login", data)
-      .then((response) => {
-        const { accessToken, expireTime } = response.data;
-        inMemoryJwtService.setToken(accessToken, expireTime);
+  const handleSignIn = async (data, navigateTo) => {
+    try {
+      const response = await AuthClient.post("/login", data);
+      const { accessToken, expireTime, user } = response.data;
+      inMemoryJwtService.setToken(accessToken, expireTime, user);
 
-        setIsUserLogged(true);
+      const workspaceResponse = await axios.get(
+        `https://localhost:7002/api/workspace?userId=${user.id}`
+      );
+      const selectedWorkspaceId = await workspaceResponse.data[0].id;
 
-        const selectedWorkspaceId = localStorage.getItem("selectedWorkspaceId");
+      setIsUserLogged(true);
+      setUser(user);
 
-        if (selectedWorkspaceId) {
-          navigateTo(`/workspace/${selectedWorkspaceId}/dashboard`);
-        } else {
-          navigateTo(`/workspace/0/dashboard`);
-        }
-      })
-      .catch((error) => {
-        showErrorMessage(error);
-        setIsUserLogged(false);
-      });
+      if (selectedWorkspaceId) {
+        navigateTo(`/workspace/${selectedWorkspaceId}/dashboard`);
+      } else {
+        navigateTo(`/workspace/0/dashboard`);
+      }
+    } catch (error) {
+      showErrorMessage(error);
+      setIsUserLogged(false);
+    }
   };
 
   const getUserData = () => {
@@ -79,16 +86,18 @@ const AuthProvider = ({ children }) => {
     console.log("refresh");
     AuthClient.post("/refresh")
       .then((response) => {
-        const { accessToken, expireTime } = response.data;
+        const { accessToken, expireTime, user } = response.data;
         inMemoryJwtService.setToken(accessToken, expireTime);
 
         setIsAppReady(true);
         setIsUserLogged(true);
+        setUser(user);
       })
       .catch((error) => {
         console.log(error);
         setIsAppReady(true);
         setIsUserLogged(false);
+        setUser();
       });
   }, []);
 
@@ -103,15 +112,10 @@ const AuthProvider = ({ children }) => {
         getUserData,
         isUserLogged,
         isAppReady,
+        user,
       }}
     >
-      {isAppReady ? (
-        children
-      ) : (
-        <div className="centered">
-          <div>Загрузка</div>
-        </div>
-      )}
+      {isAppReady ? children : <Preloader />}
     </AuthContext.Provider>
   );
 };

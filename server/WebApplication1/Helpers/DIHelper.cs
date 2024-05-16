@@ -12,6 +12,8 @@ namespace TaskManager.RestAPI.Helpers
         {
             services.AddTransient<IUserRepository, UserRepository>();
             services.AddTransient<IRefreshSessionRepository, RefreshSessionRepository>();
+            services.AddTransient<IWorkspaceRepository, WorkspaceRepository>();
+            services.AddTransient<IWorkspaceUserRepository, WorkspaceUserRepository>();
 
             return services;
         }
@@ -19,6 +21,7 @@ namespace TaskManager.RestAPI.Helpers
         public static IServiceCollection ConfigureServices(this IServiceCollection services)
         {
             services.AddTransient<IUserService, UserService>();
+            services.AddTransient<IWorkspaceService, WorkspaceService>();
 
             return services;
         }

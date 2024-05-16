@@ -2,9 +2,10 @@
 {
     public class Workspace
     {
-        public int Id { get; set; }
+        public string Id { get; set; }
+        public string Title { get; set; }
 
-        public DateTime CreationDate { get; set; }
-        public int CreatorId { get; set; }
+        // public DateTime CreationDate { get; set; }
+        // public int CreatorId { get; set; }
     }
 }

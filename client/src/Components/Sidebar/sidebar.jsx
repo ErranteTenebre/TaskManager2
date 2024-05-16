@@ -8,6 +8,7 @@ import { IoSettings } from "react-icons/io5";
 
 import { useSelector } from "react-redux";
 import { Logo } from "Components/Logo";
+import { DataContext } from "Context/DataContext";
 
 const SidebarContext = createContext();
 
@@ -17,10 +18,7 @@ export function Sidebar({ projects }) {
   const [isProjectsOpen, setIsProjectsOpen] = useState(true);
   const location = useLocation();
 
-  const selectedWorkspaceId = useSelector(
-    (state) => state.workspace.selectedWorkspaceId
-  );
-  console.log(selectedWorkspaceId);
+  const { selectedWorkspace } = useContext(DataContext);
 
   return (
     <aside
@@ -61,14 +59,16 @@ export function Sidebar({ projects }) {
                     href={sidebarItem.href}
                   ></SidebarItem>
                 ))
-              : SidebarDataTasks.map((sidebarItem, i) => (
+              : selectedWorkspace
+              ? SidebarDataTasks.map((sidebarItem, i) => (
                   <SidebarItem
                     key={i}
                     icon={sidebarItem.icon}
                     text={sidebarItem.text}
-                    href={`/workspace/${selectedWorkspaceId}${sidebarItem.href}`}
+                    href={`/workspace/${selectedWorkspace.id}${sidebarItem.href}`}
                   ></SidebarItem>
-                ))}
+                ))
+              : ""}
             <div
               className={`${styles.projectsToggleButton} ${styles.sidebarContainer}`}
             >

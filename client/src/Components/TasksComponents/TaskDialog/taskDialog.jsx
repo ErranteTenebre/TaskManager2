@@ -26,7 +26,7 @@ const TaskDialog = ({ task }) => {
 
   const items = [
     {
-      label: "Open Task",
+      label: "Oткрыть задачу",
       icon: (
         <AiTwotoneFolderOpen
           className={styles["task-dialog__menu-item-icon"]}
@@ -36,7 +36,7 @@ const TaskDialog = ({ task }) => {
       onClick: () => navigate(`/task/${task._id}`),
     },
     {
-      label: "Edit",
+      label: "Изменить",
       icon: (
         <MdOutlineEdit
           className={styles["task-dialog__menu-item-icon"]}
@@ -46,7 +46,7 @@ const TaskDialog = ({ task }) => {
       onClick: () => setOpenEdit(true),
     },
     {
-      label: "Add Sub-Task",
+      label: "Доб.подзадачу",
       icon: (
         <MdAdd
           className={styles["task-dialog__menu-item-icon"]}
@@ -54,16 +54,6 @@ const TaskDialog = ({ task }) => {
         />
       ),
       onClick: () => setOpen(true),
-    },
-    {
-      label: "Duplicate",
-      icon: (
-        <HiDuplicate
-          className={styles["task-dialog__menu-item-icon"]}
-          aria-hidden="true"
-        />
-      ),
-      onClick: () => duplicateHandler(),
     },
   ];
 
@@ -116,7 +106,7 @@ const TaskDialog = ({ task }) => {
                         className={styles["task-dialog__delete-icon"]}
                         aria-hidden="true"
                       />
-                      Delete
+                      Удалить
                     </button>
                   )}
                 </Menu.Item>

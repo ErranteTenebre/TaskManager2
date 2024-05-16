@@ -129,3 +129,4 @@ C:\Users\Айдар\Documents\Programming\www\MyProjects\diplomTaskManager\serve
 C:\Users\Айдар\Documents\Programming\www\MyProjects\diplomTaskManager\server\WebApplication1\obj\Debug\net8.0\WebApplication1.pdb
 C:\Users\Айдар\Documents\Programming\www\MyProjects\diplomTaskManager\server\WebApplication1\obj\Debug\net8.0\WebApplication1.genruntimeconfig.cache
 C:\Users\Айдар\Documents\Programming\www\MyProjects\diplomTaskManager\server\WebApplication1\obj\Debug\net8.0\ref\WebApplication1.dll
+C:\Users\Айдар\Documents\Programming\www\MyProjects\diplomTaskManager\server\WebApplication1\obj\Debug\net8.0\WebApplication1.sourcelink.json

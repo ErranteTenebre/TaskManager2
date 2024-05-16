@@ -28,16 +28,10 @@
 }
 
 .tasks-page__tabs-container {
+  margin: 20px 0 0 0;
   display: flex;
-  padding-top: 1rem;
-  padding-bottom: 1rem;
-  gap: 1rem;
-  justify-content: space-between;
-  width: 100%;
-
-  @media (min-width: 768px) {
-    column-gap: 3rem;
-  }
+  flex-wrap: nowrap;
+  gap: 1rem; /* Отступ между элементами */
 }
 
 .tasks-page__table-view-container {

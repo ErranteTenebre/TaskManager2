@@ -9,7 +9,6 @@
         public int? PriorityId { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
         public int? ProjectId { get; set; }
         public int? RootTaskId { get; set; }
         public int WorkspaceId { get; set; }

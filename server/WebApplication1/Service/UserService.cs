@@ -1,5 +1,6 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Azure;
 using Azure.Core;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +35,22 @@ namespace WebApplication1.Service
             return await _userRepository.GetById(id);
         }
 
-        public async Task<(string accessToken, string refreshToken, int expireTime)> Login(string email, string password, string fingerprint)
+        public async Task<User> GetByRefreshToken(string stringRefreshToken)
+        {
+            JwtSecurityToken refreshSecurityToken = _jwtService.VerifyRefreshToken(stringRefreshToken);
+
+            if (refreshSecurityToken == null)
+            {
+                throw new BadHttpRequestException("Unauthorized", 403);
+            }
+
+            (int id, string email) = _jwtService.GetJwtTokenClaims(refreshSecurityToken);
+            User user = await _userRepository.GetByEmail(email);
+
+            return user;
+        }
+
+        public async Task<(string accessToken, string refreshToken, int expireTime, User user)> Login(string email, string password, string fingerprint)
         {
             User user = await _userRepository.GetByEmail(email);
 
@@ -48,7 +64,7 @@ namespace WebApplication1.Service
 
             await _refreshSessionRepository.Create(user.Id, refreshToken, fingerprint);
 
-            return (accessToken, refreshToken, expireTime);
+            return (accessToken, refreshToken, expireTime, user);
         }
 
         public async Task LogOut(string refreshToken)
@@ -99,7 +115,7 @@ namespace WebApplication1.Service
             }
         }
 
-        public async Task<(string accessToken, string refreshToken, int expireTime)> Register(string email, string password, string login, string fingerprint)
+        public async Task<(string accessToken, string refreshToken, int expireTime, User user)> Register(string email, string password, string login, string fingerprint)
         {
             User user = await _userRepository.GetByEmail(email);
 
@@ -115,7 +131,7 @@ namespace WebApplication1.Service
 
             await _refreshSessionRepository.Create(user.Id, refreshToken, fingerprint);
 
-            return (accessToken, refreshToken, expireTime);
+            return (accessToken, refreshToken, expireTime, user);
         }
 
 

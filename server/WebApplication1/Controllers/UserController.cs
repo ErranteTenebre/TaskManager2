@@ -1,4 +1,5 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
+using System.Runtime.ConstrainedExecution;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
@@ -31,7 +32,7 @@ namespace TaskManager.RestAPI.Controllers
             string fingerprint = HttpContext.Request.Headers["Fingerprint"];
             try
             {
-                (string accessToken, string refreshToken, int expireTime) = await _userService.Register(dto.email, dto.password, dto.login, fingerprint);
+                (string accessToken, string refreshToken, int expireTime, User user) = await _userService.Register(dto.email, dto.password, dto.login, fingerprint);
 
                 Response.Cookies.Append("RefreshToken", refreshToken, new CookieOptions()
                 {
@@ -41,7 +42,7 @@ namespace TaskManager.RestAPI.Controllers
                     MaxAge = TimeSpan.FromDays(15)
                 }); ;
 
-                return Ok(new{ accessToken, expireTime });
+                return Ok(new{ accessToken, expireTime, user });
 
             } catch (Exception ex)
             {
@@ -53,10 +54,12 @@ namespace TaskManager.RestAPI.Controllers
         public async Task<ActionResult<User>> Login([FromBody] LoginDto dto)
         {
             string fingerprint = HttpContext.Request.Headers["Fingerprint"];
-
+            
             try
             {
-                (string accessToken, string refreshToken, int expireTime) = await _userService.Login(dto.email, dto.password, fingerprint);
+                (string accessToken, string refreshToken, int expireTime, User user) = await _userService.Login(dto.email, dto.password, fingerprint);
+
+              
 
                 Response.Cookies.Append("RefreshToken", refreshToken, new CookieOptions()
                 {
@@ -66,7 +69,7 @@ namespace TaskManager.RestAPI.Controllers
                     MaxAge = TimeSpan.FromDays(15)
                 }); ;
 
-                return Ok(new { accessToken, expireTime });
+                return Ok(new { accessToken, expireTime, user });
 
             }
             catch (Exception ex)
@@ -80,11 +83,12 @@ namespace TaskManager.RestAPI.Controllers
         public async Task<ActionResult<User>> GetUser()
         {
             string path = Request.Path;
+
             JwtSecurityToken accessToken = (JwtSecurityToken) HttpContext.Items["VerifiedToken"];
 
             (int userId, string email) = _jwtService.GetJwtTokenClaims(accessToken);
 
-           User user = await _userService.GetById(userId);
+            User user = await _userService.GetById(userId);
 
             return user;
         }
@@ -123,6 +127,8 @@ namespace TaskManager.RestAPI.Controllers
             {
                 (string accessToken, string newRefreshToken, DateTime accessTokenExpiration) = await _userService.Refresh(currentRefreshToken, fingerprint);
 
+                User user = await _userService.GetByRefreshToken(newRefreshToken);
+
                 Response.Cookies.Append("RefreshToken", newRefreshToken, new CookieOptions
                 {
                     HttpOnly = true,
@@ -134,7 +140,8 @@ namespace TaskManager.RestAPI.Controllers
                 return Ok(new
                 {
                     AccessToken = accessToken,
-                    AccessTokenExpiration = accessTokenExpiration
+                    AccessTokenExpiration = accessTokenExpiration,
+                    User = user,
                 });
             }
             catch (Exception ex)
