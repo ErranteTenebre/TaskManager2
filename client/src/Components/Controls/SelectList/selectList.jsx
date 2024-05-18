@@ -5,15 +5,23 @@ import React, { Fragment } from "react";
 import { BsChevronExpand } from "react-icons/bs";
 import { MdCheck } from "react-icons/md";
 
-const SelectList = ({ lists, selected, setSelected, label }) => {
+const SelectList = ({
+  label,
+  options,
+  selectedOption,
+  displayProperty,
+  onChange,
+}) => {
   return (
     <div className={styles.wrapper}>
       {label && <p className={styles.label}>{label}</p>}
 
-      <Listbox value={selected} onChange={setSelected}>
+      <Listbox value={selectedOption} onChange={onChange}>
         <div className={styles["list-container"]}>
           <Listbox.Button className={styles.button}>
-            <span className={styles.block}>{selected}</span>
+            <span className={styles.block}>
+              {selectedOption[displayProperty]}
+            </span>
             <span className={styles["icon-container"]}>
               <BsChevronExpand className={styles.icon} aria-hidden="true" />
             </span>
@@ -25,31 +33,34 @@ const SelectList = ({ lists, selected, setSelected, label }) => {
             leaveTo={styles.leaveTo}
           >
             <Listbox.Options className={styles.options}>
-              {lists.map((list, index) => (
-                <Listbox.Option
-                  key={index}
-                  className={({ active }) =>
-                    `${styles.option} ${
-                      active ? styles.active : styles.unactive
-                    }`
-                  }
-                  value={list}
-                >
-                  {({ selected }) => (
-                    <>
-                      <span className={styles.truncate}>{list}</span>
-                      {selected ? (
-                        <span className={styles.selectedIcon}>
-                          <MdCheck
-                            className={styles.checkIcon}
-                            aria-hidden="true"
-                          />
+              {options &&
+                options.map((option, index) => (
+                  <Listbox.Option
+                    key={index}
+                    className={({ active }) =>
+                      `${styles.option} ${
+                        active ? styles.active : styles.unactive
+                      }`
+                    }
+                    value={option}
+                  >
+                    {({ selected }) => (
+                      <>
+                        <span className={styles.truncate}>
+                          {option[displayProperty]}
                         </span>
-                      ) : null}
-                    </>
-                  )}
-                </Listbox.Option>
-              ))}
+                        {selected ? (
+                          <span className={styles.selectedIcon}>
+                            <MdCheck
+                              className={styles.checkIcon}
+                              aria-hidden="true"
+                            />
+                          </span>
+                        ) : null}
+                      </>
+                    )}
+                  </Listbox.Option>
+                ))}
             </Listbox.Options>
           </Transition>
         </div>

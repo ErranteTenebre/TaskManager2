@@ -2,92 +2,22 @@ import { UserPlus } from "lucide-react";
 import styles from "./workspacePanel.module.scss";
 
 import { useContext, useEffect, useRef, useState } from "react";
-import { IoCheckmark, IoPeople, IoSettings } from "react-icons/io5";
+import { IoPeople, IoSettings } from "react-icons/io5";
 import { getInitials } from "Utils/generalUtils";
 
-import { useDispatch, useSelector } from "react-redux";
-// import { setSelectedWorkspaceId } from "store/actions/workspaceActions";
 import { useLocation, useNavigate } from "react-router-dom";
-import { DataContext } from "Context/DataContext";
+import { WorkspaceContext } from "Context/WorkspaceContext";
+import { WorkspaceInvitePeople } from "Components/WorkspaceComponents/WorkspaceInvitePeople/WorkspaceInvitePeople";
 
 const workspaceBaseUrl = "/workspace";
 
-// const workspaces = [
-//   {
-//     id: 0,
-//     name: "Мое рабочее пространство",
-//   },
-//   {
-//     id: 1,
-//     name: "Чисто прикольное пространство",
-//   },
-//   {
-//     id: 2,
-//     name: "2",
-//   },
-//   {
-//     id: 3,
-//     name: "3",
-//   },
-//   {ё
-//     id: 4,
-//     name: "4",
-//   },
-//   {
-//     id: 5,
-//     name: "5",
-//   },
-// ];
-
-const options = [
-  {
-    icon: (
-      <IoSettings
-        size={16}
-        className={styles["workspacePanel__dropdown-option-icon"]}
-      ></IoSettings>
-    ),
-    href: `${workspaceBaseUrl}/settings`,
-    text: "Настройки",
-  },
-  {
-    icon: (
-      <IoPeople
-        size={16}
-        className={styles["workspacePanel__dropdown-option-icon"]}
-      ></IoPeople>
-    ),
-    href: `${workspaceBaseUrl}/humans`,
-    text: "Люди",
-  },
-  {
-    icon: (
-      <UserPlus
-        size={16}
-        className={styles["workspacePanel__dropdown-option-icon"]}
-      ></UserPlus>
-    ),
-    href: `${workspaceBaseUrl}/invite`,
-    text: "Пригласить",
-  },
-];
-
 const WorkspacePanel = () => {
-  const handleWorkspaceSelect = (e, workspace) => {
-    e.preventDefault();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false);
+  const panelRef = useRef();
 
-    setSelectedWorkspace(workspace);
-
-    let parts = location.pathname.split("/");
-
-    // Заменяем значение в массиве
-    parts[2] = workspace.id;
-
-    // Объединяем массив обратно в строку
-    let replacedString = parts.join("/");
-
-    navigate(replacedString);
-  };
+  const { workspaces, selectedWorkspace, selectWorkspace, userRoleId } =
+    useContext(WorkspaceContext);
 
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -112,13 +42,9 @@ const WorkspacePanel = () => {
     };
   }, []);
 
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const panelRef = useRef();
-  const location = useLocation();
-  const navigate = useNavigate();
-
-  const { workspaces, selectedWorkspace, setSelectedWorkspace } =
-    useContext(DataContext);
+  const handleInviteClick = () => {
+    setIsInviteModalOpen(true);
+  };
 
   return (
     <div className={styles["workspacePanel"]} ref={panelRef}>
@@ -158,16 +84,41 @@ const WorkspacePanel = () => {
           )}
 
           <WorkspaceOptions>
-            {options.map((option, i) => {
-              return (
-                <WorkspaceOption
-                  key={i}
-                  icon={option.icon}
-                  text={option.text}
-                  href={option.href}
-                ></WorkspaceOption>
-              );
-            })}
+            <WorkspaceOption
+              icon={
+                <IoSettings
+                  size={16}
+                  className={styles["workspacePanel__dropdown-option-icon"]}
+                />
+              }
+              text="Настройки"
+              href={`${workspaceBaseUrl}/${selectedWorkspace?.id}/settings`}
+              setIsDropdownOpen={setIsDropdownOpen}
+            />
+            <WorkspaceOption
+              icon={
+                <IoPeople
+                  size={16}
+                  className={styles["workspacePanel__dropdown-option-icon"]}
+                />
+              }
+              text="Люди"
+              href={`${workspaceBaseUrl}/${selectedWorkspace?.id}/humans`}
+              setIsDropdownOpen={setIsDropdownOpen}
+            />
+            {userRoleId === 2 && ( //Проверка, что админ
+              <WorkspaceOption
+                icon={
+                  <UserPlus
+                    size={16}
+                    className={styles["workspacePanel__dropdown-option-icon"]}
+                  />
+                }
+                text="Пригласить"
+                onClick={handleInviteClick}
+                setIsDropdownOpen={setIsDropdownOpen}
+              />
+            )}
           </WorkspaceOptions>
 
           <div className={styles["workspacePanel__dropdown-workspace-list"]}>
@@ -178,9 +129,7 @@ const WorkspacePanel = () => {
                       key={workspace.id}
                       workspaceId={workspace.id}
                       workspaceName={workspace.title}
-                      onClick={(event) =>
-                        handleWorkspaceSelect(event, workspace)
-                      }
+                      onClick={() => selectWorkspace(workspace.id)}
                     />
                   ) : (
                     ""
@@ -190,6 +139,11 @@ const WorkspacePanel = () => {
           </div>
         </div>
       </div>
+
+      <WorkspaceInvitePeople
+        open={isInviteModalOpen}
+        setOpen={setIsInviteModalOpen}
+      />
     </div>
   );
 };
@@ -203,7 +157,10 @@ const WorkspacePanelItem = ({
   return (
     <a
       href="##"
-      onClick={onClick}
+      onClick={(e) => {
+        e.preventDefault();
+        onClick();
+      }}
       className={`${styles["workspacePanel__workspace-link"]} ${
         styles["workspacePanel__dropdown-workspace"]
       } ${disabled ? styles["workspacePanel__workspace-link_disabled"] : ""}`}
@@ -232,9 +189,17 @@ const WorkspaceOptions = ({ children }) => {
   );
 };
 
-const WorkspaceOption = ({ icon, text, href }) => {
+const WorkspaceOption = ({ icon, text, href, onClick, setIsDropdownOpen }) => {
   return (
-    <a href={href} className={styles["workspacePanel__dropdown-option"]}>
+    <a
+      href={href}
+      className={styles["workspacePanel__dropdown-option"]}
+      onClick={(e) => {
+        e.preventDefault();
+        setIsDropdownOpen(false);
+        onClick();
+      }}
+    >
       {icon}
 
       <span className={styles["workspacePanel__dropdown-option-text"]}>

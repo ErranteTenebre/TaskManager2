@@ -76,7 +76,6 @@ const AuthProvider = ({ children }) => {
   const getUserData = () => {
     AuthClient.get("/user")
       .then((response) => {
-        console.log(response);
         return response.data;
       })
       .catch((error) => console.log(error));

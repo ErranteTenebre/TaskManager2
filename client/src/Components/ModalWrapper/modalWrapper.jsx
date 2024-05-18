@@ -3,7 +3,7 @@ import styles from "./modalWrapper.module.scss";
 import { Dialog, Transition } from "@headlessui/react";
 import { Fragment, useRef } from "react";
 
-const ModalWrapper = ({ open, setOpen, children }) => {
+const ModalWrapper = ({ open, setOpen, extended, children }) => {
   const cancelButtonRef = useRef(null);
 
   return (
@@ -37,7 +37,11 @@ const ModalWrapper = ({ open, setOpen, children }) => {
               leaveFrom={styles["dialog__transition-child-leave-from"]}
               leaveTo={styles["dialog__transition-child-leave-to"]}
             >
-              <Dialog.Panel className={styles.dialog__panel}>
+              <Dialog.Panel
+                className={`${styles.dialog__panel} ${
+                  extended ? styles["dialog__panel-extended"] : ""
+                }`}
+              >
                 <div className={styles["dialog__panel-wrapper"]}>
                   <div className={styles["dialog__panel-container"]}>
                     <div className={styles["dialog__panel-inner-content"]}>

@@ -20,11 +20,13 @@
   padding-right: 2.5rem;
   border-radius: 0.25rem;
   border-width: 1px;
+  border-style: solid;
   border-color: #d1d5db;
   width: 100%;
   text-align: left;
   background-color: #ffffff;
   cursor: default;
+  height: 48px;
 
   @media (min-width: 640px) {
     font-size: 0.875rem;

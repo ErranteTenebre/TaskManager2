@@ -9,6 +9,7 @@ import { IoSettings } from "react-icons/io5";
 import { useSelector } from "react-redux";
 import { Logo } from "Components/Logo";
 import { DataContext } from "Context/DataContext";
+import { WorkspaceContext } from "Context/WorkspaceContext";
 
 const SidebarContext = createContext();
 
@@ -18,7 +19,7 @@ export function Sidebar({ projects }) {
   const [isProjectsOpen, setIsProjectsOpen] = useState(true);
   const location = useLocation();
 
-  const { selectedWorkspace } = useContext(DataContext);
+  const { selectedWorkspace } = useContext(WorkspaceContext);
 
   return (
     <aside

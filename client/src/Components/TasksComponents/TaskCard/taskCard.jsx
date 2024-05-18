@@ -6,6 +6,7 @@ import {
   MdKeyboardArrowDown,
   MdKeyboardArrowUp,
   MdKeyboardDoubleArrowUp,
+  MdRadioButtonUnchecked,
 } from "react-icons/md";
 
 import { formatDate } from "Utils/dateUtils";
@@ -20,9 +21,10 @@ import { FaList } from "react-icons/fa";
 import { IoMdAdd } from "react-icons/io";
 
 const ICONS = {
-  высокий: <MdKeyboardDoubleArrowUp />,
-  средний: <MdKeyboardArrowUp />,
-  низкий: <MdKeyboardArrowDown />,
+  Высокий: <MdKeyboardDoubleArrowUp />,
+  Средний: <MdKeyboardArrowUp />,
+  Низкий: <MdKeyboardArrowDown />,
+  Обычный: <MdRadioButtonUnchecked />, // Добавление иконки для обычного приоритета
 };
 
 const TaskCard = ({ task }) => {
@@ -38,14 +40,14 @@ const TaskCard = ({ task }) => {
           <div className={styles["task-card__top"]}>
             <div
               className={`${styles["task-card__priority-container"]} ${
-                PRIOTITYSTYELS[task?.priority]
+                PRIOTITYSTYELS[task?.priority.name]
               }`}
             >
               <span className={styles["task-card__priority-icon"]}>
-                {ICONS[task?.priority]}
+                {ICONS[task?.priority.name]}
               </span>
               <span className={styles["task-card__priority-text"]}>
-                {task?.priority} Приоритет
+                {task?.priority.name} Приоритет
               </span>
             </div>
 
@@ -56,13 +58,13 @@ const TaskCard = ({ task }) => {
             <div className={styles["task-card__title-and-data-container"]}>
               <div
                 className={`${styles["task-card__task-stage-circle"]} ${
-                  TASK_TYPE[task.stage]
+                  TASK_TYPE[task.stage.name]
                 }`}
               />
               <h4 className={styles["task-card__task-title"]}>{task?.title}</h4>
             </div>
             <span className={styles["task-card__task-date"]}>
-              {formatDate(new Date(task?.date))}
+              {formatDate(new Date(task?.startDate))}
             </span>
           </>
 
@@ -85,14 +87,14 @@ const TaskCard = ({ task }) => {
             </div>
 
             <div className={styles["task-card__users-container"]}>
-              {task?.team?.map((m, index) => (
+              {task?.taskResponsibles?.map((responsible, index) => (
                 <div
                   key={index}
                   className={`${styles["task-card__user"]}
                   ${BGS[index % BGS?.length]}
                 `}
                 >
-                  <UserInfo user={m} />
+                  <UserInfo user={responsible.responsible} />
                 </div>
               ))}
             </div>

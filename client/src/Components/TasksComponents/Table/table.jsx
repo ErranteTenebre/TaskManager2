@@ -35,15 +35,15 @@ const Table = ({ tasks }) => {
   const TableHeader = () => (
     <thead className={styles.table__header}>
       <tr className={styles["table__header-row"]}>
-        <th className={styles["table__header-item"]}>Task Title</th>
-        <th className={styles["table__header-item"]}>Priority</th>
+        <th className={styles["table__header-item"]}>Заголовок</th>
+        <th className={styles["table__header-item"]}>Приоритет</th>
         <th
           className={`${styles["table__header-item"]} ${styles["table__header-item_created-at"]}`}
         >
-          Created At
+          Дата начала
         </th>
-        <th className={styles["table__header-item"]}>Assets</th>
-        <th className={styles["table__header-item"]}>Team</th>
+        <th className={styles["table__header-item"]}>Вложения</th>
+        <th className={styles["table__header-item"]}>Ответственные</th>
       </tr>
     </thead>
   );
@@ -54,7 +54,7 @@ const Table = ({ tasks }) => {
         <div className={styles["table__row-task-title"]}>
           <div
             className={`${styles["table__row-task-title-stage"]} ${
-              TASK_TYPE[task.stage]
+              TASK_TYPE[task?.stage]
             }`}
           />
           <p className={styles["table__row-task-title-text"]}>{task?.title}</p>
@@ -65,20 +65,20 @@ const Table = ({ tasks }) => {
         <div className={styles["table__row-priority"]}>
           <span
             className={`${styles["table__row-priority-icon"]} ${
-              PRIOTITYSTYELS[task?.priority]
+              PRIOTITYSTYELS[task?.priority.name]
             }`}
           >
             {ICONS[task?.priority]}
           </span>
           <span className={styles["table__row-priority-text"]}>
-            {task?.priority} Priority
+            {task?.priority.name} Priority
           </span>
         </div>
       </td>
 
       <td className={styles.table__row}>
         <span className={styles["table__row-date-text"]}>
-          {formatDate(new Date(task?.date))}
+          {formatDate(new Date(task?.startDate))}
         </span>
       </td>
 
@@ -117,13 +117,13 @@ const Table = ({ tasks }) => {
       <td className={styles["table__row-buttons-cell"]}>
         <Button
           className={styles["table__row-edit-button"]}
-          label="Edit"
+          label="Изменить"
           type="button"
         />
 
         <Button
           className={styles["table__row-delete-button"]}
-          label="Delete"
+          label="Удалить"
           type="button"
           onClick={() => deleteClicks(task._id)}
         />

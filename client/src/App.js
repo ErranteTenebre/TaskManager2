@@ -23,6 +23,8 @@ import { AuthContext } from "Context/AuthContext";
 
 import { SnackbarProvider } from "notistack";
 import { useContext } from "react";
+import { TasksProvider } from "Context/TasksContext";
+import { WorkspaceProvider } from "Context/WorkspaceContext";
 
 const projects = [
   {
@@ -42,18 +44,22 @@ const projects = [
 function Layout() {
   const { isUserLogged } = useContext(AuthContext);
   return isUserLogged ? (
-    <div className="page">
-      <div className="main-page-container">
-        <Sidebar projects={projects}></Sidebar>
+    <WorkspaceProvider>
+      <TasksProvider>
+        <div className="page">
+          <div className="main-page-container">
+            <Sidebar projects={projects}></Sidebar>
 
-        <div className="main-page-content">
-          <Navbar></Navbar>
-          <div className="content-inner">
-            <Outlet></Outlet>
+            <div className="main-page-content">
+              <Navbar></Navbar>
+              <div className="content-inner">
+                <Outlet></Outlet>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </TasksProvider>
+    </WorkspaceProvider>
   ) : (
     <div className="page">
       <Outlet></Outlet>
@@ -72,20 +78,23 @@ function App() {
             {isUserLogged ? (
               <>
                 <Route
-                  path="/workspace/:id/dashboard"
+                  path="/workspace/:workspaceId/dashboard"
                   element={<Dashboard />}
                 />
-                <Route path="/workspace/:id/tasks" element={<TasksPage />} />
                 <Route
-                  path="/workspace/:id/projects"
+                  path="/workspace/:workspaceId/tasks"
+                  element={<TasksPage />}
+                />
+                <Route
+                  path="/workspace/:workspaceId/projects"
                   element={<ProjectsPage />}
                 />
                 <Route
-                  path="/workspace/:id/projects/:id"
+                  path="/workspace/:workspaceId/projects/:id"
                   element={<ProjectPage />}
                 />
                 <Route
-                  path="/workspace/:id/settings"
+                  path="/workspace/:workspaceId/settings"
                   element={<WorkspaceSettings />}
                 />
                 <Route path="/random" element={<WorkspaceSettings />} />

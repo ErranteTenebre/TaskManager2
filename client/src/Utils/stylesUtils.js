@@ -1,13 +1,13 @@
 export const PRIOTITYSTYELS = {
-  высокий: "text-red-600",
-  средний: "text-yellow-600",
-  низкий: "text-blue-600",
+  Высокий: "text-red-600",
+  Средний: "text-yellow-600",
+  Низкий: "text-blue-600",
 };
 
 export const TASK_TYPE = {
-  todo: "bg-blue-600",
-  "in progress": "bg-yellow-600",
-  completed: "bg-green-600",
+  "Для выполнения": "bg-blue-600",
+  "В процессе": "bg-yellow-600",
+  Выполнена: "bg-green-600",
 };
 
 export const BGS = [

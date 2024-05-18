@@ -1,31 +1,23 @@
 import styles from "./userList.module.scss";
 
 import { Listbox, Transition } from "@headlessui/react";
-import { Fragment, useEffect, useState } from "react";
+import { Fragment, useContext, useEffect, useState } from "react";
 import { BsChevronExpand } from "react-icons/bs";
 import { summary } from "Assets/data";
 import { getInitials } from "Utils/generalUtils";
 import { MdCheck } from "react-icons/md";
+import { WorkspaceContext } from "Context/WorkspaceContext";
 
-const UserList = ({ setTeam, team }) => {
-  const data = summary.users;
-  const [selectedUsers, setSelectedUsers] = useState([]);
+const UserList = ({ selectedUsers, setSelectedUsers }) => {
+  const { workspaceUsers } = useContext(WorkspaceContext);
 
   const handleChange = (el) => {
     setSelectedUsers(el);
-    setTeam(el?.map((u) => u._id));
   };
-  useEffect(() => {
-    if (team?.length < 1) {
-      data && setSelectedUsers([data[0]]);
-    } else {
-      setSelectedUsers(team);
-    }
-  }, []);
 
   return (
     <div>
-      <p className={styles.title}>Assign Task To: </p>
+      <p className={styles.title}>Назначить ответственных: </p>
       <Listbox
         value={selectedUsers}
         onChange={(el) => handleChange(el)}
@@ -34,7 +26,7 @@ const UserList = ({ setTeam, team }) => {
         <div className={styles.container}>
           <Listbox.Button className={styles["list-button"]}>
             <span className={styles["selected-users-container"]}>
-              {selectedUsers?.map((user) => user.name).join(", ")}
+              {selectedUsers?.map((user) => user.login).join(", ")}
             </span>
 
             <span className={styles["scrolling-icon-container"]}>
@@ -52,7 +44,7 @@ const UserList = ({ setTeam, team }) => {
             leaveTo={styles["leave-to"]}
           >
             <Listbox.Options className={styles.options}>
-              {data?.map((user, index) => (
+              {workspaceUsers?.map((user, index) => (
                 <Listbox.Option
                   key={index}
                   className={({ active }) =>
@@ -71,10 +63,10 @@ const UserList = ({ setTeam, team }) => {
                       >
                         <div className={styles["option-icon-wrapper"]}>
                           <span className={styles["option-icon-text"]}>
-                            {getInitials(user.name)}
+                            {getInitials(user.login)}
                           </span>
                         </div>
-                        <span>{user.name}</span>
+                        <span>{user.login}</span>
                       </div>
                       {selected ? (
                         <span

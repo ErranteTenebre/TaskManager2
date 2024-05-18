@@ -11,7 +11,7 @@ const UserInfo = ({ user }) => {
         {/* {({ open }) => ( */}
         <>
           <Popover.Button className={styles["user-info__open-button"]}>
-            <span>{getInitials(user?.name)}</span>
+            <span>{getInitials(user?.login)}</span>
           </Popover.Button>
 
           <Transition

@@ -1,10 +1,28 @@
 export const formatDate = (date) => {
-  // Get the month, day, and year
-  const month = date.toLocaleString("en-US", { month: "short" });
-  const day = date.getDate();
-  const year = date.getFullYear();
+  const months = [
+    "января",
+    "февраля",
+    "марта",
+    "апреля",
+    "мая",
+    "июня",
+    "июля",
+    "августа",
+    "сентября",
+    "октября",
+    "ноября",
+    "декабря",
+  ];
 
-  const formattedDate = `${day}-${month}-${year}`;
+  const dateObj = new Date(date);
 
-  return formattedDate;
+  if (isNaN(dateObj)) {
+    throw new Error("Invalid date");
+  }
+
+  const day = dateObj.getDate();
+  const month = months[dateObj.getMonth()];
+  const year = dateObj.getFullYear();
+
+  return `${day} ${month} ${year} г.`;
 };

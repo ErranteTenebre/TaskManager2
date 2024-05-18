@@ -2,7 +2,7 @@ import styles from "./tasksPage.module.scss";
 
 import { useParams } from "react-router-dom";
 
-import React, { useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FaList } from "react-icons/fa";
 import { MdGridView } from "react-icons/md";
 import { IoMdAdd } from "react-icons/io";
@@ -17,6 +17,8 @@ import { Preloader } from "Components/Preloader";
 
 import { tasks } from "Assets/data";
 import { Table } from "Components/TasksComponents/Table";
+import axios from "axios";
+import { useTasks } from "Hooks/useTasks";
 
 const TABS = [
   { title: "Доска", icon: <MdGridView /> },
@@ -24,21 +26,22 @@ const TABS = [
 ];
 
 const TASK_TYPE = {
-  todo: "bg-blue-600",
-  "in progress": "bg-yellow-600",
-  completed: "bg-green-600",
+  "Для выполнения": "bg-blue-600",
+  "В процессе": "bg-yellow-600",
+  Выполнена: "bg-green-600",
 };
 
 const TasksPage = () => {
   const params = useParams();
 
-  const [selected, setSelected] = useState(0);
-  const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [selectedView, setSelectedView] = useState(0);
+  const [isAddTaskPopupOpen, setIsAddTaskOpen] = useState(false);
+
+  const { tasks, isLoading } = useTasks();
 
   const status = params?.status || "";
 
-  return loading ? (
+  return isLoading ? (
     <div className={styles["tasks-page__preloader-container"]}>
       <Preloader />
     </div>
@@ -49,7 +52,7 @@ const TasksPage = () => {
 
         {!status && (
           <Button
-            onClick={() => setOpen(true)}
+            onClick={() => setIsAddTaskOpen(true)}
             label="Создать задачу"
             icon={<IoMdAdd className="text-lg" />}
             className={styles["tasks-page__create-button"]}
@@ -57,16 +60,19 @@ const TasksPage = () => {
         )}
       </div>
 
-      <Tabs tabs={TABS} setSelected={setSelected}>
+      <Tabs tabs={TABS} setSelected={setSelectedView}>
         {!status && (
           <div className={styles["tasks-page__tabs-container"]}>
-            <TaskTitle label="Для выполнения" type={TASK_TYPE.todo} />
-            <TaskTitle label="В процессе" type={TASK_TYPE["in progress"]} />
-            <TaskTitle label="Выполнена" type={TASK_TYPE.completed} />
+            <TaskTitle
+              label="Для выполнения"
+              type={TASK_TYPE["Для выполнения"]}
+            />
+            <TaskTitle label="В процессе" type={TASK_TYPE["В процессе"]} />
+            <TaskTitle label="Выполнена" type={TASK_TYPE.Выполнена} />
           </div>
         )}
 
-        {selected !== 1 ? (
+        {selectedView !== 1 ? (
           <BoardView tasks={tasks} />
         ) : (
           <div className={styles["tasks-page__table-view-container"]}>
@@ -75,7 +81,7 @@ const TasksPage = () => {
         )}
       </Tabs>
 
-      <AddTask open={open} setOpen={setOpen} />
+      <AddTask open={isAddTaskPopupOpen} setOpen={setIsAddTaskOpen} />
     </div>
   );
 };

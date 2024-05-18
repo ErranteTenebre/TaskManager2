@@ -1,0 +1,52 @@
+@import "../../../Scss/variables.scss";
+
+.workspace-invite__container {
+  display: flex;
+  flex-direction: column;
+  height: 250px;
+}
+
+.workspace-invite__title {
+  font-size: 22px;
+}
+
+.workspace-invite__subtitle {
+  margin: 10px 0 0 0;
+  font-size: 16px;
+  color: $gray;
+}
+
+.workspace-invite__email-field {
+  margin: 1rem 0 0 0;
+  flex-grow: 1;
+}
+
+.workspace-invite__form {
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.workspace-invite__form-buttons {
+  margin: 1rem 0 0 0;
+  display: flex;
+  gap: 70px;
+}
+
+.workspace-invite__cancel-button {
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  background-color: #ffffff;
+
+  @media (min-width: 640px) {
+    width: auto;
+  }
+}
+
+.workspace-invite__invite-button {
+  // width: 200px;
+}

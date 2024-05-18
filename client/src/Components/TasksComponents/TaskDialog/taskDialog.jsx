@@ -13,6 +13,9 @@ import { AddTask } from "Components/AddTask";
 import { AddSubTask } from "Components/TasksComponents/AddSubTask";
 import { ConfirmDialog } from "Components/Dialogs/ConfirmDialog";
 
+import config from "appConfig";
+import axios from "axios";
+
 const TaskDialog = ({ task }) => {
   const [open, setOpen] = useState(false);
   const [openEdit, setOpenEdit] = useState(false);
@@ -21,7 +24,18 @@ const TaskDialog = ({ task }) => {
   const navigate = useNavigate();
 
   const duplicateHandler = () => {};
-  const deleteClicks = () => {};
+  const handleRemoveTask = (taskId) => {
+    axios
+      .delete(`${config.SERVER_BASE_URL}task/${taskId}`)
+      .then((response) => {
+        console.log(response);
+
+        // fetchTasks(); // Предполагается, что fetchTasks определена в области видимости
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
   const deleteHandler = () => {};
 
   const items = [
@@ -97,7 +111,7 @@ const TaskDialog = ({ task }) => {
                 <Menu.Item>
                   {({ active }) => (
                     <button
-                      onClick={() => deleteClicks()}
+                      onClick={() => handleRemoveTask(task.id)}
                       className={`${active ? styles.active : ""} ${
                         styles["task-dialog__delete-menu-item-button"]
                       }`}
